@@ -76,4 +76,6 @@ jobs:
         env:
           PRINT_PAYLOAD: true
           CLUSTER: prod-fss
-          RESOURCE: .nais/nais.yml,image=${{ needs.build-and-push.outputs.image }}
+          RESOURCE: .nais/nais.yml
+          VAR: image=${{ needs.build-and-push.outputs.image }}
+
