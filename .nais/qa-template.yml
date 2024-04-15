@@ -47,6 +47,8 @@ spec:
         mountPath: /var/run/secrets/nais.io/service_user
       - kvPath: /apikey/appdynamics/dev
         mountPath: /var/run/secrets/nais.io/vault
+  envFrom:
+    - secret: modiacontextholder-redis-passord
   env:
     - name: APP_NAME
       value: "modiaeventdistribution"
@@ -55,4 +57,4 @@ spec:
     - name: APP_ENVIRONMENT
       value: "{{ namespace }}"
     - name: REDIS_HOST
-      value: "modiacontextholder-redis.personoversikt.svc.nais.local"
+      value: "modiacontextholder-redis-med-passord.personoversikt.svc.nais.local"

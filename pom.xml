@@ -11,10 +11,10 @@
     <properties>
         <java.version>11</java.version>
         <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
-        <kotlin.version>1.6.10</kotlin.version>
+        <kotlin.version>1.9.22</kotlin.version>
         <ktor.version>1.6.7</ktor.version>
-        <jedis.version>3.7.1</jedis.version>
-        <common.version>2.2020.08.07_16.18-e6be6d6a09e6</common.version>
+        <jedis.version>5.1.2</jedis.version>
+        <common.version>2.2023.01.10_13.49-81ddc732df3a</common.version>
         <main.class>no.nav.modiaeventdistribution.MainKt</main.class>
     </properties>
 
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.13</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

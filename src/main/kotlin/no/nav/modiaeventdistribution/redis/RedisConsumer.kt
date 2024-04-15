@@ -14,34 +14,37 @@ import redis.clients.jedis.JedisPubSub
 
 object Redis {
     private val environment = EnvironmentUtils.getRequiredProperty("APP_ENVIRONMENT")
-    
+
     @JvmStatic
     fun getChannel() = "ContextOppdatering-$environment"
-    
+
     class Consumer(
         private val hostAndPort: HostAndPort,
-        private val channel: String = getChannel()
+        private val password: String,
+        private val channel: String = getChannel(),
     ) : HealthCheckAware {
-        
+
         private var running = false
         private var thread: Thread? = null
         private var jedis: Jedis? = null
         private val channelReference = Channel<String?>()
-        
-        private val subscriber = object:JedisPubSub() {
+
+        private val subscriber = object : JedisPubSub() {
             override fun onMessage(channel: String?, message: String?) {
                 runBlocking {
                     channelReference.send(message)
                 }
-                log.info("""
+                log.info(
+                    """
                         Redismelding mottatt på kanal '$channel' med melding:
                         $message
-                        """.trimIndent())
+                    """.trimIndent(),
+                )
             }
         }
-        
+
         fun getFlow() = channelReference.consumeAsFlow()
-        
+
         fun start() {
             running = true
             log.info("starting redis consumer on channel '$channel'")
@@ -51,25 +54,26 @@ object Redis {
             thread?.isDaemon = true
             thread?.start()
         }
-        
+
         fun stop() {
             running = false
             subscriber.unsubscribe()
             channelReference.close()
             thread = null
         }
-        
+
         private fun run() {
             while (running) {
                 try {
                     jedis = Jedis(hostAndPort)
+                    jedis?.auth(password)
                     jedis?.subscribe(subscriber, channel)
                 } catch (e: Exception) {
                     log.error(e.message, e)
                 }
             }
         }
-    
+
         private fun checkHealth(): HealthCheckResult {
             return try {
                 jedis?.ping()
@@ -78,13 +82,12 @@ object Redis {
                 HealthCheckResult.unhealthy(e)
             }
         }
-    
+
         override fun getHealthCheck(): SelfTestCheck {
             return SelfTestCheck(
                 "Redis - via ${hostAndPort.host}",
-                false
+                false,
             ) { this.checkHealth() }
         }
     }
-    
 }
