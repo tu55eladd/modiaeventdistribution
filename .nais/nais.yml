@@ -56,4 +56,4 @@ spec:
     - name: APP_ENVIRONMENT
       value: "p"
     - name: REDIS_HOST
-      value: "modiacontextholder-redis.personoversikt.svc.nais.local"
+      value: "modiacontextholder-redis-med-passord.personoversikt.svc.nais.local"
