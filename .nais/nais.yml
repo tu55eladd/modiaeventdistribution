@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 spec:
-  image: {{ image }}
+  image: "{{ image }}"
   port: 8080
   liveness:
     path: modiaeventdistribution/internal/isAlive
@@ -46,6 +46,8 @@ spec:
         mountPath: /var/run/secrets/nais.io/service_user
       - kvPath: /apikey/appdynamics/prod
         mountPath: /var/run/secrets/nais.io/vault
+  envFrom:
+    - secret: modiacontextholder-redis-passord
   env:
     - name: APP_NAME
       value: "modiaeventdistribution"
